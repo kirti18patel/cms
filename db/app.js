@@ -174,4 +174,9 @@ const addRole = () =>{
 }
 
 
+const exit = () =>{
+    console.log("Thank You for using Employee Tracker");
+}
+
+
 userChoice();
