@@ -46,7 +46,11 @@ function userChoice(){
 }
 
 const viewAllEmployee = () =>{
-    console.log("view all employee");
+    const sqlQuery = `SELECT * FROM department`;
+    db.query(sqlQuery, function(err, result, fields) {
+        if (err) throw err;
+        console.table(result);
+    })
 }
 const viewAllDepartments = () =>{
     console.log("view all department");
