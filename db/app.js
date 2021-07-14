@@ -72,5 +72,15 @@ const viewAllDepartments = () =>{
     })  
 }
 
+const viewAllRoles = () =>{
+    let sqlQuery = `SELECT * FROM role`;
+    db.query(sqlQuery, function(err, result, fields) {
+        if (err) throw err;
+        console.log("\n=============================================================================================================================\n");
+        console.table(result);
+        userChoice();
+    })   
+}
+
 
 userChoice();
