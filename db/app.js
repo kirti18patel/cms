@@ -82,5 +82,42 @@ const viewAllRoles = () =>{
     })   
 }
 
+const addEmployee = () =>{
+    inquirer.prompt([
+        {
+            name: 'firstName',
+            type: 'input',
+            message: "Enter First name of employee : " 
+        },
+        {
+            name: 'lastName',
+            type: 'input',
+            message: "Enter Last name of employee : " 
+        },
+        {
+            name: 'roleId',
+            type: 'input',
+            message: "Enter role id of employee : " 
+        },
+        {
+            name: 'managerId',
+            type: 'input',
+            message: "Enter manager id of employee's manager : " 
+        }
+    ]).then(answers => {
+        let sqlQuery = `INSERT INTO employee (first_name, last_name, role_id, manager_id)
+        VALUES (?, ?, ?, ?)`;
+        let data = [answers.firstName, answers.lastName, answers.roleId, answers.managerId];
+
+        db.query(sqlQuery, data, function(err, result, fields) 
+        {
+            if (err) throw err;
+            console.log("\n=============================================================================================================================\n");
+            console.log("Employee added to Employee Table");
+            userChoice();
+        })
+    })
+}
+
 
 userChoice();
