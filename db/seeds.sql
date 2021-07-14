@@ -14,7 +14,7 @@ VALUES
   ('QA Analyst', 60000, 2),
   ('Accountant',120000,3),
   ('Financial Advisor', 100000, 3),
-  ('Lawyer', 900000 4),
+  ('Lawyer', 900000, 4),
   ('Legal Team Lead', 130000, 4);
 
 INSERT INTO employee (first_name, last_name, role_id, manager_id)
@@ -26,9 +26,9 @@ VALUES
   ('Ekisha', 'John', 3 , NULL),
   ('Leon', 'Williams', 4 , NULL),
   ('Ellie', 'Akl', 4 , NULL),
-  ('Jeremy', 'Peter', 5 , 3)
+  ('Jeremy', 'Peter', 5 , 3),
   ('Rachel', 'Marta', 5 , 3),
   ('Simran', 'Kaur', 6 , NULL),
   ('Lisa', 'Ray', 7 , NULL),
-  ('Indila', 'Dube', 8 , 9)
+  ('Indila', 'Dube', 8 , 9),
   ('Poria', 'Clarke', 9 , NULL);

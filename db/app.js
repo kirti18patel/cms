@@ -1,11 +1,9 @@
-const mysql = require('mysql');
 const db = require('./connection');
-const express = require('express');
-const router = express.Router();
 const inquirer = require('inquirer');
 const consoleTable = require('console.table');
 
 function userChoice(){
+    console.log("\n=============================================================================================================================\n");
     inquirer.prompt([
         {
             name: 'listoptions',
@@ -24,21 +22,29 @@ function userChoice(){
     ]).then(answers => {
         switch(answers.listoptions){
             case 'view all employees':
-                viewAllEmployee(); 
+                viewAllEmployee();
+                break;
             case 'view all departments':
                 viewAllDepartments(); 
+                break;
             case 'view all roles':
                 viewAllRoles(); 
+                break;
             case 'add an employee':
                 addEmployee(); 
+                break;
             case 'add a department':
                 addDepartment();
+                break;
             case 'add a role':
                 addRole();
+                break;
             case 'update employee role':
                 updateEmpoyeeRole(); 
+                break;
             case 'delete an employee':
                 deleteEmployee(); 
+                break;
             case 'Exit':
                 exit();
         }
@@ -46,43 +52,14 @@ function userChoice(){
 }
 
 const viewAllEmployee = () =>{
-    const sqlQuery = `SELECT * FROM department`;
-    db.query(sqlQuery, function(err, result, fields) {
+    let sqlQuery = `SELECT * FROM employee`;
+    db.query(sqlQuery, function(err, result, fields) 
+    {
         if (err) throw err;
+        console.log("\n=============================================================================================================================\n");
         console.table(result);
-    })
-}
-const viewAllDepartments = () =>{
-    console.log("view all department");
-    
-}
-const viewAllRoles = () =>{
-    console.log("view all roles");
-    
-}
-const addEmployee = () =>{
-    console.log("add employee");
-    
-}
-const addDepartment = () =>{
-    console.log("add department");
-    
-}
-const addRole = () =>{
-    console.log("add role");
-    
-}
-const updateEmpoyeeRole = () =>{
-    console.log("uepdate employee");
-    
-}
-const deleteEmployee = () =>{
-    console.log("delete employee");
-    
-}
-const exit = () =>{
-    console.log("exit");
-    
+    }) 
+    userChoice();
 }
 
 userChoice();
