@@ -141,5 +141,37 @@ const addDepartment = () =>{
     })
 }
 
+const addRole = () =>{
+    inquirer.prompt([
+        {
+            name: 'title',
+            type: 'input',
+            message: "Enter title of role to be added : " 
+        },
+        {
+            name: 'salary',
+            type: 'input',
+            message: "Enter salary associated with role : " 
+        },
+        {
+            name: 'departmentId',
+            type: 'input',
+            message: "Enter department id of role : " 
+        }
+    ]).then(answers => {
+        let sqlQuery = `INSERT INTO role (title, salary, department_id)
+        VALUES (?, ?, ?)`;
+        let data = [answers.title, answers.salary, answers.departmentId];
+        
+        db.query(sqlQuery, data, function(err, result, fields) 
+        {
+            if (err) throw err;
+            console.log("\n=============================================================================================================================\n");
+            console.log("Role added to Role Table");
+            userChoice();
+        })
+    })
+}
+
 
 userChoice();
