@@ -119,5 +119,27 @@ const addEmployee = () =>{
     })
 }
 
+const addDepartment = () =>{
+    inquirer.prompt([
+        {
+            name: 'departmentName',
+            type: 'input',
+            message: "Enter department name to be added : " 
+        }
+    ]).then(answers => {
+        let sqlQuery = `INSERT INTO department (name)
+        VALUES (?)`;
+        let data = [answers.departmentName];
+        
+        db.query(sqlQuery, data, function(err, result, fields) 
+        {
+            if (err) throw err;
+            console.log("\n=============================================================================================================================\n");
+            console.log("Department added to department Table");
+            userChoice();
+        })
+    })
+}
+
 
 userChoice();
