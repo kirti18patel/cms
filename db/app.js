@@ -258,8 +258,76 @@ const addRole = () =>{
 }
 
 const updateEmpoyeeRole = () =>{
-    console.log("update employee");
-    userChoice();    
+    let sqlQueryEmp = `SELECT employee.id,
+    employee.first_name, 
+    employee.last_name, 
+    role.id AS "Role Id"
+    FROM employee, role, department
+    WHERE department.id = role.department_id
+    AND role.id = employee.role_id`;
+
+    db.query(sqlQueryEmp, function(err, result, fields) 
+    {
+        if (err) throw err;
+        let employeeNames = [];
+
+        result.forEach((employee) => {
+            employeeNames.push(`${employee.first_name} ${employee.last_name}`);
+        })
+
+        let sqlQueryRole = `SELECT role.id, role.title FROM role`;
+        db.query(sqlQueryRole, function(err, resultRole, fields) 
+        {
+            if (err) throw err;
+            let rolesList = [];
+
+            resultRole.forEach((role) =>{
+                rolesList.push(role.title);
+            })
+
+            inquirer.prompt([
+                {
+                    name: 'employee',
+                    type: 'list',
+                    message: 'Choose employee name : ',
+                    choices: employeeNames
+                },
+                {
+                    name: 'role',
+                    type: 'list',
+                    message: 'Choose new role : ',
+                    choices: rolesList
+                }
+            ]).then((answers) => {
+                let newTitleId, employeeId;
+
+                result.forEach((employee) => {
+                    if(answers.employee === `${employee.first_name} ${employee.last_name}`){
+                        employeeId = employee.id;
+                    }
+                })
+
+                resultRole.forEach((role) => {
+                    if(answers.role === role.title){
+                        newTitleId = role.id;
+                    }
+                })
+
+                let sqlQueryUpdate = `UPDATE employee SET employee.role_id = ? WHERE employee.id = ?`;
+                
+                db.query(sqlQueryUpdate, [newTitleId, employeeId], function(err, result, fields) 
+                {
+                    if (err) throw err;
+                    console.log("\n=============================================================================================================================\n");
+                    console.log("Employee Role Updated");
+                    viewAllEmployee();
+                    userChoice();
+                })
+                
+            })
+
+        })
+    })    
 }
 
 const exit = () =>{
