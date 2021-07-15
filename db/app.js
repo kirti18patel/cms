@@ -19,7 +19,6 @@ function userChoice(){
                 'add a department', 
                 'add a role', 
                 'update employee role', 
-                'delete an employee', 
                 'Exit']
         }
     ]).then(answers => {
@@ -45,9 +44,6 @@ function userChoice(){
             case 'update employee role':
                 updateEmpoyeeRole(); 
                 break;
-            case 'delete an employee':
-                deleteEmployee(); 
-                break;
             case 'Exit':
                 exit();
         }
@@ -71,9 +67,9 @@ const viewAllEmployee = () =>{
     {
         if (err) throw err;
         console.log("\n=============================================================================================================================\n");
-        console.table(result);
-    }) 
-    userChoice();
+        console.table(result); 
+        userChoice();
+    })
 }
 
 const viewAllDepartments = () =>{
@@ -107,12 +103,28 @@ const addEmployee = () =>
         {
             name: 'firstName',
             type: 'input',
-            message: "Enter First name of employee : " 
+            message: "Enter First name of employee : ",
+            validate: nameInput => {
+                if (nameInput) {
+                  return true;
+                } else {
+                  console.log('Please enter valid input!');
+                  return false;
+                }
+              }
         },
         {
             name: 'lastName',
             type: 'input',
-            message: "Enter Last name of employee : " 
+            message: "Enter Last name of employee : ",
+            validate: nameInput => {
+                if (nameInput) {
+                  return true;
+                } else {
+                  console.log('Please enter valid input!');
+                  return false;
+                }
+              }
         },
         {
             name: 'managerId',
@@ -156,7 +168,6 @@ const addEmployee = () =>
                             if (err) throw err;
                             console.log("Employee has been added!");
                             viewAllEmployee();
-                            userChoice();
                         })
                     })  
 
@@ -172,7 +183,15 @@ const addDepartment = () =>{
         {
             name: 'departmentName',
             type: 'input',
-            message: "Enter department name to be added : " 
+            message: "Enter department name to be added : ",
+            validate: nameInput => {
+                if (nameInput) {
+                  return true;
+                } else {
+                  console.log('Please enter valid input!');
+                  return false;
+                }
+              }
         }
     ]).then(answers => {
         let sqlQuery = `INSERT INTO department (name)
@@ -185,7 +204,6 @@ const addDepartment = () =>{
             console.log("\n=============================================================================================================================\n");
             console.log("Department added to department Table");
             viewAllDepartments();
-            userChoice();
         })
     })
 }
@@ -221,12 +239,28 @@ const addRole = () =>{
                     {
                         name: 'title',
                         type: 'input',
-                        message: "Enter title of role to be added : " 
+                        message: "Enter title of role to be added : " ,
+                        validate: nameInput => {
+                            if (nameInput) {
+                              return true;
+                            } else {
+                              console.log('Please enter valid input!');
+                              return false;
+                            }
+                          }
                     },
                     {
                         name: 'salary',
                         type: 'input',
-                        message: "Enter salary associated with role : " 
+                        message: "Enter salary associated with role : ",
+                        validate: nameInput => {
+                            if (!isNaN(nameInput)) {
+                              return true;
+                            } else {
+                              console.log('Please enter valid input!');
+                              return false;
+                            }
+                          } 
                     }
                 ]).then((answers) => {
                     let newRole = answers.title;
@@ -248,7 +282,6 @@ const addRole = () =>{
                             console.log("\n=============================================================================================================================\n");
                             console.log("Role added to Role Table");
                             viewAllRoles();
-                            userChoice();
                         })
                 })
             
@@ -321,7 +354,6 @@ const updateEmpoyeeRole = () =>{
                     console.log("\n=============================================================================================================================\n");
                     console.log("Employee Role Updated");
                     viewAllEmployee();
-                    userChoice();
                 })
                 
             })
