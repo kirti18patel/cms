@@ -60,7 +60,8 @@ const viewAllEmployee = () =>{
                     employee.last_name, 
                     role.title,
                     department.name AS Department,
-                    role.salary
+                    role.salary,
+                    employee.manager_id
                     FROM employee, role, department
                     WHERE department.id = role.department_id
                     AND role.id = employee.role_id
@@ -88,7 +89,8 @@ const viewAllDepartments = () =>{
 const viewAllRoles = () =>{
     let sqlQuery = `SELECT role.id,
                     role.title,
-                    department.name AS department
+                    department.name AS department,
+                    role.salary
                     FROM role INNER JOIN department ON role.department_id = department.id`;
 
     db.query(sqlQuery, function(err, result, fields) {
@@ -150,10 +152,10 @@ const addEmployee = () =>
                         const manager = managerChoice.manager;
                         empInfo.push(manager);
                         const sql =   `INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES (?, ?, ?, ?)`;
-                        console.log(empInfo, sql);
                         db.query(sql, empInfo, function(err, result){
-                            if (error) throw error;
-                            console.log("Employee has been added!")
+                            if (err) throw err;
+                            console.log("Employee has been added!");
+                            viewAllEmployee();
                             userChoice();
                         })
                     })  
@@ -182,41 +184,77 @@ const addDepartment = () =>{
             if (err) throw err;
             console.log("\n=============================================================================================================================\n");
             console.log("Department added to department Table");
+            viewAllDepartments();
             userChoice();
         })
     })
 }
 
 const addRole = () =>{
-    inquirer.prompt([
-        {
-            name: 'title',
-            type: 'input',
-            message: "Enter title of role to be added : " 
-        },
-        {
-            name: 'salary',
-            type: 'input',
-            message: "Enter salary associated with role : " 
-        },
-        {
-            name: 'departmentId',
-            type: 'input',
-            message: "Enter department id of role : " 
-        }
-    ]).then(answers => {
-        let sqlQuery = `INSERT INTO role (title, salary, department_id)
-        VALUES (?, ?, ?)`;
-        let data = [answers.title, answers.salary, answers.departmentId];
-        
-        db.query(sqlQuery, data, function(err, result, fields) 
+    const sql = `SELECT * FROM department`;
+        db.query(sql, function(err, result, fields) 
         {
             if (err) throw err;
-            console.log("\n=============================================================================================================================\n");
-            console.log("Role added to Role Table");
-            userChoice();
+            let departmentArray = [];
+            result.forEach((department) => {departmentArray.push(department.name)});
+            departmentArray.push("Create Department");
+
+            inquirer.prompt([
+                {
+                    name: "deptName",
+                    type: 'list',
+                    message: 'In which department you want to add a new role',
+                    choices: departmentArray
+                }
+            ]).then((answers) => {
+                if(answers.deptName === "Create Department"){
+                    addDepartment();
+                    return;
+                }
+                else{
+                    addRoleExistDept(answers);
+                }
+            });
+
+            const addRoleExistDept = userChoiceAddRole =>{
+                inquirer.prompt([
+                    {
+                        name: 'title',
+                        type: 'input',
+                        message: "Enter title of role to be added : " 
+                    },
+                    {
+                        name: 'salary',
+                        type: 'input',
+                        message: "Enter salary associated with role : " 
+                    }
+                ]).then((answers) => {
+                    let newRole = answers.title;
+                    let departmentId;
+            
+                    result.forEach((department) =>{
+                        if( userChoiceAddRole.deptName === department.name ){
+                            departmentId = department.id;
+                        }
+                    })
+                    console.log(departmentId);  
+                    let sqlQuery = `INSERT INTO role (title, salary, department_id)
+                    VALUES (?, ?, ?)`;
+                    let data = [newRole, answers.salary, departmentId];
+                    
+                    db.query(sqlQuery, data, function(err, result, fields) 
+                        {
+                            if (err) throw err;
+                            console.log("\n=============================================================================================================================\n");
+                            console.log("Role added to Role Table");
+                            viewAllRoles();
+                            userChoice();
+                        })
+                })
+            
+            }
+
         })
-    })
 }
 
 const updateEmpoyeeRole = () =>{
