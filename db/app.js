@@ -81,7 +81,7 @@ const viewAllDepartments = () =>{
         userChoice();
     })  
 }
-
+ 
 const viewAllRoles = () =>{
     let sqlQuery = `SELECT role.id,
                     role.title,
