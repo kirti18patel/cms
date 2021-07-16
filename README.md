@@ -46,6 +46,13 @@ click the link below to check the repository : [Github Repository Link](https://
   npm install figlet
   ```
 ## Preview
+    Preview of employee tracker -
+![alt app-demo-gif](images/img1.png)
+![alt app-demo-gif](images/img2.png)
+![alt app-demo-gif](images/img3.png)
+
+Walkthrough video of Employee tracker -
+![alt app-demo-gif](images/cms.gif)
 
 ## Usage 
   User have to install all the dependencies before running it on terminal.
