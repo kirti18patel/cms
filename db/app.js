@@ -51,17 +51,17 @@ function userChoice(){
 }
 
 const viewAllEmployee = () =>{
-    let sqlQuery = `SELECT employee.id,
-                    employee.first_name, 
-                    employee.last_name, 
-                    role.title,
-                    department.name AS Department,
-                    role.salary,
-                    employee.manager_id
-                    FROM employee, role, department
-                    WHERE department.id = role.department_id
-                    AND role.id = employee.role_id
-                    ORDER BY employee.id ASC`;
+    let sqlQuery = `SELECT employee1.id AS ID,
+                    employee1.first_name AS FirstName, 
+                    employee1.last_name AS LastName,
+                    role.title AS Title,
+                    department.name AS DepartmentName,
+                    employee2.first_name AS ManagersName,
+                    role.salary AS Salary
+                    FROM employee employee1
+                    LEFT JOIN employee employee2 ON employee1.manager_id = employee2.id
+                    LEFT JOIN role ON role.id = employee1.role_id
+                    LEFT JOIN department ON department.id = role.department_id`;
 
     db.query(sqlQuery, function(err, result, fields) 
     {
@@ -83,10 +83,10 @@ const viewAllDepartments = () =>{
 }
  
 const viewAllRoles = () =>{
-    let sqlQuery = `SELECT role.id,
-                    role.title,
-                    department.name AS department,
-                    role.salary
+    let sqlQuery = `SELECT role.id AS ID,
+                    role.title AS Title,
+                    department.name AS Department,
+                    role.salary AS Salary
                     FROM role INNER JOIN department ON role.department_id = department.id`;
 
     db.query(sqlQuery, function(err, result, fields) {
